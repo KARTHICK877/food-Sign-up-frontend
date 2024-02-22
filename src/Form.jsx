@@ -34,7 +34,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', values);
+      const response = await axios.post('https://backend-form-1.onrender.com/api/signup', values);
       console.log(response.data); // Handle success
       resetForm(); // Clear the form
       toast.success('Sign up successful'); // Show success toast

@@ -1,14 +1,20 @@
 .sign-up-form-container {
-  background-image: url('./image/food.png');
-  background-size: cover;
-  background-position: center;
+  
   width: 100vw; /* Full width of the viewport */
   height: 120vh; /* Full height of the viewport */
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
+video{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 122%;
+  object-fit: cover;
+  z-index: -1;
+}
 
 form {
   /* border: solid 1px; */

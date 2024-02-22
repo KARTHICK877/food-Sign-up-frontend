@@ -17,7 +17,7 @@ const SignUpForm = () => {
     pincode: '',
     city: '',
     dob: '',
-    // modeOfDelivery: '',
+    modeOfDelivery: '',
   };
 
   const validationSchema = Yup.object().shape({
@@ -52,8 +52,22 @@ const SignUpForm = () => {
 
   return (
     
-    <div className='sign-up-form-container'>
-     {/* <img src="./logo.png" width="20%" style={{}} alt="" /> */}
+    <div className='sign-up-form-container' >
+      <video src="./foods.mp4" autoPlay loop muted >       </video>
+      {/* <video  src={"./foods.mp4"}
+          alt="Temporary Video"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: -1,
+          }}
+          autoPlay
+          muted
+          loop> */}
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({ isSubmitting }) => (
           
@@ -99,10 +113,10 @@ const SignUpForm = () => {
             <div className="form-group">
               <label htmlFor="dob">Date of Birth:</label>
               <Field type="date" name="dob" className="form-control" />
-              {/* <ErrorMessage name="dob" component="div" className="error" /> */}
+              <ErrorMessage name="dob" component="div" className="error" />
             </div>
             <GetLocation  />
-            {/* <div className="form-group">
+            <div className="form-group">
               <label htmlFor="modeOfDelivery">Mode of Delivery:</label>
               <Field as="select" name="modeOfDelivery" className="form-control">
                 <option value="">Select Mode of Delivery</option>
@@ -111,7 +125,7 @@ const SignUpForm = () => {
                 <option value="Foot">Foot</option>
               </Field>
               <ErrorMessage name="modeOfDelivery" component="div" className="error" />
-            </div> */}
+            </div>
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Sign Up</button>
           </Form>
         )}
@@ -133,6 +147,7 @@ const SignUpForm = () => {
           });
         }}
       />
+
     </div>
   );
 };

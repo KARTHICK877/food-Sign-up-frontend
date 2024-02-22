@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import GetLocation from './GetLocation';
 import './App.css';
-import { toast, ToastContainer } from 'react-toastify'// Import toast from react-toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUpForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const initialValues = {
     name: '',
     mobileNumber: '',
@@ -20,35 +22,38 @@ const SignUpForm = () => {
     modeOfDelivery: '',
   };
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    mobileNumber: Yup.string().matches(/^\d{10}$/, 'Mobile number must be 10 digits').required('Mobile number is required'),
-    email: Yup.string().email('Invalid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-    address: Yup.string().required('Address is required'),
-    pincode: Yup.string().required('Pincode is required'),
-    city: Yup.string().required('City is required'),
-    // dob: Yup.date().required('Date of Birth is required'),
-    // modeOfDelivery: Yup.string().required('Mode of Delivery is required'),
-  });
+ const validationSchema = Yup.object().shape({
+  name: Yup.string().required(<span style={{ color: 'red' }}> 'Name is required' </span>),
+  mobileNumber: Yup.string().matches(/^\d{10}$/, <span style={{ color: 'red' }}>
+     'Mobile number must be 10 digits' </span>).required(<span style={{ color: 'red' }}> 'Mobile number is required' </span>),
+  email: Yup.string().email(<span style={{ color: 'red' }}> 'Invalid email address' </span>).required(<span style={{ color: 'red' }}> 'Email is required' </span>),
+  password: Yup.string().required(<span style={{ color: 'red' }}> 'Password is required' </span>),
+  address: Yup.string().required(<span style={{ color: 'red' }}> 'Address is required' </span>),
+  pincode: Yup.string().required(<span style={{ color: 'red' }}> 'Pincode is required' </span>),
+  city: Yup.string().required(<span style={{ color: 'red' }}> 'City is required' </span>),
+  // dob: Yup.date().required(<span style={{ color: 'red' }}> 'Date of Birth is required' </span>),
+  // modeOfDelivery: Yup.string().required(<span style={{ color: 'red' }}> 'Mode of Delivery is required' </span>),
+});
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      const response = await axios.post('https://backend-form-1.onrender.com/api/signup', values);
-      console.log(response.data); // Handle success
-      resetForm(); // Clear the form
-      toast.success('Sign up successful'); // Show success toast
-    } catch (error) {
-      if (error.response && error.response.status === 400 && error.response.data.message === 'Email already exists') {
-        toast.error('Email is already taken'); // Show error toast for existing email
-      } else {
-        console.error('Error:', error); // Handle other errors
-      }
-    } finally {
-      setSubmitting(false);
+
+const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  setIsSubmitting(true); // Start submitting
+
+  try {
+    const response = await axios.post('https://backend-form-1.onrender.com/api/signup', values);
+    console.log(response.data); // Handle success
+    resetForm(); // Clear the form
+    toast.success('Sign up successful'); // Show success toast
+  } catch (error) {
+    if (error.response && error.response.status === 400 && error.response.data.message === 'Email already exists') {
+      toast.error('Email is already taken'); // Show error toast for existing email
+    } else {
+      console.error('Error:', error); // Handle other errors
     }
-  };
-
+  } finally {
+    setIsSubmitting(false); // Stop submitting
+  }
+};
 
   return (
     
@@ -126,7 +131,10 @@ const SignUpForm = () => {
               </Field>
               <ErrorMessage name="modeOfDelivery" component="div" className="error" />
             </div>
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Sign Up</button>
+             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+              {isSubmitting && <Spinner />}
+              {!isSubmitting && 'Sign Up'}
+            </button>
           </Form>
         )}
       </Formik>
@@ -150,6 +158,13 @@ const SignUpForm = () => {
 
     </div>
   );
+  
 };
-
+const Spinner = () => {
+  return (
+    <div className="spinner-container">
+      <div className="spinner"></div>
+    </div>
+  );
+};
 export default SignUpForm;
